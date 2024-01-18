@@ -1,3 +1,16 @@
 Quickstart: SQL backup and restore to Azure Blob Storage
 
 https://learn.microsoft.com/en-us/sql/relational-databases/tutorial-sql-server-backup-and-restore-to-azure-blob-storage-service?view=sql-server-ver16&redirectedfrom=MSDN&tabs=SSMS
+
+
+-------
+a) Backup to local disk, possibly followed by AzCopy to large block blobs 
+b) Backup to Azure Files,
+c) Move the database files to Azure Files   
+
+Option c) is the most expensive. It includes copying of 64 TB of data from 5 replicas into new location (Azure share) with unknown performance benefits. We have decided that this approach is the most expensive.
+Option a) may contribute to overall IOPS limit per VM, requires provisioning of large chunk of Premium storage.
+Option b) was chosen as the least expensive and the most effective. It does not require changes in VM configuration
+
+----------
+https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/file-snapshot-backups-for-database-files-in-azure?view=sql-server-ver16
